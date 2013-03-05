@@ -1,9 +1,24 @@
 
+if (CLIENT) then
+
 SWEP.DrawWeaponInfoBox = true
 SWEP.Author			= "Ice Tea"
 SWEP.Contact		= "Steam Profile"
 SWEP.Purpose		= "Rape Dem' Bitches... or guys"
 SWEP.Instructions	= "Mouse1: Rape\nMouse2: Taunt\nHave Fun!"
+SWEP.PrintName = "Rape SWEP"
+SWEP.Slot = 1
+SWEP.SlotPos = 4;
+SWEP.DrawAmmo = false;
+SWEP.DrawCrosshair		= false
+SWEP.ViewModelFOV		= 82
+SWEP.ViewModelFlip		= true
+
+end
+
+if (SERVER) then
+	AddCSLuaFile("shared.lua")
+end
 
 SWEP.Category			= "Ice Tea"
 SWEP.Spawnable			= true
@@ -33,11 +48,11 @@ SWEP.ViewModel = Model("models/weapons/v_hands.mdl")
 --SWEP.WorldModel = ""
 
 local InProgress = false
-SWEP.RapeLength = 20
+SWEP.RapeLength = 7
 SWEP.PRIMARYPW = "RAPEDEMBITCHEZ1"
 SWEP.SECONDARYPW = "RAPEDEMBITCHEZ2"
 
-SWEP.SoundDelay = 1.5
+SWEP.SoundDelay = 1
 
 
 local sounds2 = {
