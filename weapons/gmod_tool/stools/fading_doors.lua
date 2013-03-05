@@ -2,11 +2,12 @@
 	~ Fading Door STool ~
 	~ Based on Conna's, but this time it works. ~
 	~ Lexi ~
+	~ Modified and Workshopped by Zapk ~
 --]]
 
 --[[ Tool Related Settings ]]--
 TOOL.Category = "Construction";
-TOOL.Name = "#Fading Doors";
+TOOL.Name = "#Fading Door";
 
 TOOL.ClientConVar["key"] = "5"
 TOOL.ClientConVar["toggle"] = "0"
@@ -21,15 +22,15 @@ if (CLIENT) then
 		GAMEMODE:AddNotify("Fading door has been created!", NOTIFY_GENERIC, 10);
 		surface.PlaySound ("ambient/water/drip" .. math.random(1, 4) .. ".wav");
 	end);
-	language.Add("Tool_fading_doors_name", "Fading Doors");
-	language.Add("Tool_fading_doors_desc", "Makes anything into a fadable door");
-	language.Add("Tool_fading_doors_0", "Click on something to make it a fading door. Reload to set it back to normal");
-	language.Add("Undone_fading_door", "Undone Fading Door");
+	language.Add( "Tool.fading_doors.name", "Fading Door" );
+	language.Add( "Tool.fading_doors.desc", "Makes an object a Fading Door" );
+	language.Add( "Tool.fading_doors.0", "Click on an object to make it a fading door." );
+	language.Add( "Undone_fading_door", "Fading Door Undone" );
 	
 	function TOOL:BuildCPanel()
-		self:AddControl("Header",   {Text = "#Tool_fading_doors_name", Description = "#Tool_fading_doors_desc"});
-		self:AddControl("CheckBox", {Label = "Reversed (Starts invisible, becomes solid)", Command = "fading_doors_reversed"});
-		self:AddControl("CheckBox", {Label = "Toggle Active", Command = "fading_doors_toggle"});
+		self:AddControl("Header",   {Text = "#Tool.fading_doors.name", Description = "#Tool.fading_doors.desc"});
+		self:AddControl("CheckBox", {Label = "Start Faded", Command = "fading_doors_reversed"});
+		self:AddControl("CheckBox", {Label = "Toggle", Command = "fading_doors_toggle"});
 		self:AddControl("Numpad",   {Label = "Button", ButtonSize = "22", Command = "fading_doors_key"});
 	end
 	
@@ -37,10 +38,9 @@ if (CLIENT) then
 	
 	return;
 end	
---umsg.PoolString("FadingDoorHurrah!");
+umsg.PoolString("FadingDoorHurrah!");
 
 local function fadeActivate(self)
-	if (self.fadeActive) then return; end
 	self.fadeActive = true;
 	self.fadeMaterial = self:GetMaterial();
 	self:SetMaterial("sprites/heatwave")
@@ -58,7 +58,6 @@ local function fadeActivate(self)
 end
 
 local function fadeDeactivate(self)
-	if (not self.fadeActive) then return; end
 	self.fadeActive = false;
 	self:SetMaterial(self.fadeMaterial or "");
 	self:DrawShadow(true);
@@ -81,45 +80,37 @@ local function fadeToggleActive(self)
 	end
 end
 
---[[
-	These are to prevent multiple concurrent on/off calls from glitching the door
---]]
-local function fadeInputOn(self)
-	if (self.fadeInputActive) then
+local function onUp(ply, ent)
+	if (not (ent:IsValid() and ent.fadeToggleActive and not ent.fadeToggle)) then
 		return;
 	end
-	self.fadeInputActive = true;
-	self:fadeToggleActive();
+	ent:fadeToggleActive();
 end
-
-local function fadeInputOff(self)
-	if (not self.fadeInputActive) then
-		return;
-	end
-	self.fadeInputActive = false;
-	if (not self.fadeToggle) then
-		self:fadeToggleActive();
-	end
-end
+numpad.Register("Fading Doors onUp", onUp);
 
 local function onDown(ply, ent)
 	if (not (ent:IsValid() and ent.fadeToggleActive)) then
 		return;
 	end
-	ent:fadeInputOn();
+	ent:fadeToggleActive();
 end
 numpad.Register("Fading Doors onDown", onDown);
 
-
-local function onUp(ply, ent)
-	if (not (ent:IsValid() and ent.fadeToggleActive)) then
-		return;
-	end
-	ent:fadeInputOff();
-end
-numpad.Register("Fading Doors onUp", onUp);
-
 -- Fuck you wire.
+local function getWireInputs(ent)
+	local inputs = ent.Inputs;
+	local names, types, descs = {}, {}, {};
+	if (inputs) then
+		local num;
+		for _, data in pairs(inputs) do
+			num = data.Num;
+			names[num] = data.Name;
+			types[num] = data.Type;
+			descs[num] = data.Desc;
+		end
+	end
+	return names, types, descs;
+end
 local function doWireInputs(ent)
 	local inputs = ent.Inputs;
 	if (not inputs) then
@@ -161,12 +152,14 @@ local function TriggerInput(self, name, value, ...)
 		if (value == 0) then
 			if (self.fadePrevWireOn) then
 				self.fadePrevWireOn = false;
-				self:fadeInputOff();
+				if (not self.fadeToggle) then
+					self:fadeToggleActive();
+				end
 			end
 		else
 			if (not self.fadePrevWireOn) then
 				self.fadePrevWireOn = true;
-				self:fadeInputOn();
+				self:fadeToggleActive();
 			end
 		end
 	elseif (self.fadeTriggerInput) then
@@ -179,8 +172,8 @@ local function PreEntityCopy(self)
 	if (info) then
 		duplicator.StoreEntityModifier(self, "WireDupeInfo", info);
 	end
-	if (self.wireSupportPreEntityCopy) then
-		self:wireSupportPreEntityCopy();
+	if (self.fadePreEntityCopy) then
+		self:fadePreEntityCopy();
 	end
 end
 
@@ -188,8 +181,8 @@ local function PostEntityPaste(self, ply, ent, ents)
 	if (self.EntityMods and self.EntityMods.WireDupeInfo) then
 		WireLib.ApplyDupeInfo(ply, self, self.EntityMods.WireDupeInfo, function(id) return ents[id]; end);
 	end
-	if (self.wireSupportPostEntityPaste) then
-		self:wireSupportPostEntityPaste(ply, ent, ents);
+	if (self.fadePostEntityPaste) then
+		self:fadePostEntityPaste(ply, ent, ents);
 	end
 end
 	
@@ -209,20 +202,17 @@ local function dooEet(ply, ent, stuff)
 		ent.fadeActivate = fadeActivate;
 		ent.fadeDeactivate = fadeDeactivate;
 		ent.fadeToggleActive = fadeToggleActive;
-		ent.fadeInputOn = fadeInputOn;
-		ent.fadeInputOff = fadeInputOff;
 		ent:CallOnRemove("Fading Doors", onRemove);
 		if (WireLib) then
 			doWireInputs(ent);
 			doWireOutputs(ent);
 			ent.fadeTriggerInput = ent.fadeTriggerInput or ent.TriggerInput;
 			ent.TriggerInput = TriggerInput;
-			if (not (ent.IsWire or ent.addedWireSupport)) then -- Dupe Support
-				ent.wireSupportPreEntityCopy = ent.PreEntityCopy;
+			if (not ent.IsWire) then -- Dupe Support
+				ent.fadePreEntityCopy = ent.PreEntityCopy;
 				ent.PreEntityCopy = PreEntityCopy;
-				ent.wireSupportPostEntityPaste = ent.PostEntityPaste;
+				ent.fadePostEntityPaste = ent.PostEntityPaste;
 				ent.PostEntityPaste = PostEntityPaste;
-				ent.addedWireSupport = true
 			end				
 		end
 	end
@@ -250,14 +240,12 @@ if (not FadingDoor) then
 end
 
 local function doUndo(undoData, ent)
-	if (IsValid(ent) and ent.isFadingDoor) then
-		onRemove(ent); -- Get rid of the numpad inputs.
-		ent:fadeDeactivate(); -- Ensure the doors are turned off when we remove 'em :D
-		ent.isFadingDoor = false; -- We don't actually delete the fading door functions, to save time.
-		duplicator.ClearEntityModifier(ent, "Fading Door"); -- Make sure we don't unexpectedly re-add removed doors when duped.
-		-- [[ 'Neatly' remove the Wire inputs/outputs without disturbing the pre-existing ones. ]] --
+	if (IsValid(ent)) then
+		onRemove(ent);
+		ent:fadeDeactivate();
+		ent.isFadingDoor = false;
 		if (WireLib) then
-			ent.TriggerInput = ent.fadeTriggerInput; -- Purge our input checker
+			ent.TriggerInput = ent.fadeTriggerInput;
 			if (ent.Inputs) then
 				Wire_Link_Clear(ent, "Fade");
 				ent.Inputs['Fade'] = nil;
@@ -275,9 +263,7 @@ local function doUndo(undoData, ent)
 				WireLib._SetOutputs(ent);
 			end
 		end
-		return true;
 	end
-	return false;
 end
 
 function TOOL:LeftClick(tr)
@@ -298,8 +284,4 @@ function TOOL:LeftClick(tr)
 	
 	SendUserMessage("FadingDoorHurrah!", ply);
 	return true
-end
-
-function TOOL:Reload(tr)
-	return doUndo(_,tr.Entity);
 end
