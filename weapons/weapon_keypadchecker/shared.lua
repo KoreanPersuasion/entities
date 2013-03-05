@@ -30,21 +30,19 @@ local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 	local targets = {}
 
 	for k,v in pairs(numpad.OnDownItems or {}) do
-		local Owner = keypad:CPPIGetOwner()
-
-		if v.key == keyPass and v.ply == Owner then
+		if v.key == keyPass and v.ply == keypad.Owner then
 			table.insert(targets, {type = "Entering the right password", name = v.name, ent = v.ent, original = keypad})
 		end
-		if v.key == keyDenied and v.ply == Owner then
+		if v.key == keyDenied and v.ply == keypad.Owner then
 			table.insert(targets, {type = "Entering a wrong password", name = v.name, ent = v.ent, original = keypad})
 		end
 	end
 
 	for k,v in pairs(numpad.OnUpItems or {}) do
-		if v.key == keyPass and v.ply == Owner then
+		if v.key == keyPass and v.ply == keypad.Owner then
 			table.insert(targets, {type = "after having entered the right password", name = v.name, delay = math.Round(delayPass, 2), ent = v.ent, original = keypad})
 		end
-		if v.key == keyDenied and v.ply == Owner then
+		if v.key == keyDenied and v.ply == keypad.Owner then
 			table.insert(targets, {type = "after having entered wrong password", name = v.name, delay = math.Round(delayDenied, 2), ent = v.ent, original = keypad})
 		end
 	end
@@ -97,25 +95,19 @@ local function getEntityKeypad(ent)
 	end
 
 	for k,v in pairs(ents.FindByClass("sent_keypad")) do
-		local vOwner = v:CPPIGetOwner()
-		local entOwner = ent:CPPIGetOwner()
-
-		if vOwner == entOwner and table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup1")) then
+		if v.Owner == ent.Owner and table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup1")) then
 			table.insert(targets, {type = "Right password entered", ent = v, original = ent})
 		end
-		if vOwner == entOwner and  table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup2")) then
+		if v.Owner == ent.Owner and  table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup2")) then
 			table.insert(targets, {type = "Wrong password entered", ent = v, original = ent})
 		end
 	end
 
 	for k,v in pairs(ents.FindByClass("keypad")) do
-		local vOwner = v:CPPIGetOwner()
-		local entOwner = ent:CPPIGetOwner()
-
-		if vOwner == entOwner and table.HasValue(doorKeys, tonumber(v.KeypadData.KeyGranted) or 0) then
+		if v.Owner == ent.Owner and table.HasValue(doorKeys, tonumber(v.KeypadData.KeyGranted) or 0) then
 			table.insert(targets, {type = "Right password entered", ent = v, original = ent})
 		end
-		if vOwner == entOwner and  table.HasValue(doorKeys, tonumber(v.KeypadData.KeyDenied) or 0) then
+		if v.Owner == ent.Owner and  table.HasValue(doorKeys, tonumber(v.KeypadData.KeyDenied) or 0) then
 			table.insert(targets, {type = "Wrong password entered", ent = v, original = ent})
 		end
 	end

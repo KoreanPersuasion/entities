@@ -1,12 +1,12 @@
 if (CLIENT) then
-	SWEP.Author = "CSE - Night Eagle"
+	SWEP.Author = "C"
+	SWEP.PrintName = "G36C"
 	SWEP.Contact = ""
 	SWEP.Purpose = ""
 	SWEP.Instructions = ""
-	SWEP.PrintName = "M4"
 	SWEP.Instructions = "Hold use and right-click to change firemodes or left-click to attach silencer."
-	SWEP.Slot = 2
-	SWEP.SlotPos = 0
+	SWEP.Slot = 1
+	SWEP.SlotPos = 1
 	SWEP.IconLetter = "w"
 
 	killicon.AddFont("cse_m4","CSKillIcons",SWEP.IconLetter,Color(255,80,0,255))
@@ -21,8 +21,8 @@ SWEP.Base = "weapon_cs_base2"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_rif_m4a1.mdl"
-SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
+SWEP.ViewModel = "models/weapons/v_rif_g36c.mdl"
+SWEP.WorldModel = "models/weapons/w_rif_g36c.mdl"
 SWEP.HoldType = "ar2"
 
 SWEP.Weight = 5
@@ -30,13 +30,13 @@ SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
 SWEP.Primary.Sound = Sound("Weapon_M4A1.Single")
-SWEP.Primary.Recoil = -2
-SWEP.Primary.Unrecoil = 8
-SWEP.Primary.Damage = 11
+SWEP.Primary.Recoil = 0
+SWEP.Primary.Unrecoil = 0
+SWEP.Primary.Damage = 15
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Cone	 = 0.006
+SWEP.Primary.Cone	 = 0.03
 SWEP.Primary.ClipSize = 31
-SWEP.Primary.Delay = 0.11
+SWEP.Primary.Delay = 0.06
 SWEP.Primary.DefaultClip = 31
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "smg1"

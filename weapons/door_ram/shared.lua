@@ -97,10 +97,8 @@ function SWEP:PrimaryAttack()
 	local d = GAMEMODE.Config.copscanunweld
 	local b = trace.Entity:GetClass() == "prop_physics"
 	local c = true
-
-	local Owner = trace.Entity:CPPIGetOwner()
-	if Owner then
-		c = Owner.warranted or (Owner.DarkRPVars and Owner.DarkRPVars.wanted)
+	if trace.Entity.Owner then
+		c = trace.Entity.Owner.warranted or (trace.Entity.Owner.DarkRPVars and trace.Entity.Owner.DarkRPVars.wanted)
 	end
 	if (trace.Entity:IsDoor()) then
 		local allowed = false

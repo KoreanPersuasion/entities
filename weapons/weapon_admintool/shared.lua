@@ -3,7 +3,7 @@ if (SERVER) then
 end
 
 if (CLIENT) then
-	SWEP.PrintName = "Mac10"
+	SWEP.PrintName = "Savage Me Baby"
 	SWEP.Author = "Rickster"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 4
@@ -28,13 +28,13 @@ SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "ar2"
 
 SWEP.Primary.Sound = Sound("Weapon_mac10.Single")
-SWEP.Primary.Recoil = -1.6
-SWEP.Primary.Damage =10
-SWEP.Primary.NumShots = 1
-SWEP.Primary.Cone = 0.007
-SWEP.Primary.ClipSize = 2500
-SWEP.Primary.Delay = 0.07
-SWEP.Primary.DefaultClip = 25
+SWEP.Primary.Recoil = -3
+SWEP.Primary.Damage = 0.5
+SWEP.Primary.NumShots = 100
+SWEP.Primary.Cone = 0.1
+SWEP.Primary.ClipSize = 99999
+SWEP.Primary.Delay = 0.04
+SWEP.Primary.DefaultClip = 99999
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "smg1"
 
@@ -43,6 +43,5 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector (7.1437, -2.6467, 3.0592)
-SWEP.IronSightsAng = Vector (0.4833, 11.1981, 7.2364)
-
+SWEP.IronSightsPos = Vector (0, 0, 0)
+SWEP.IronSightsAng = Vector (0, 0, 0)

@@ -30,15 +30,15 @@ SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
 SWEP.Primary.Sound = Sound("Weapon_Glock.Single")
-SWEP.Primary.Recoil = -2.7
+SWEP.Primary.Recoil = -3
 SWEP.Primary.Unrecoil = 0
-SWEP.Primary.Damage = 15
-SWEP.Primary.NumShots = 1
+SWEP.Primary.Damage = 0.3
+SWEP.Primary.NumShots = 100
 SWEP.Primary.Cone = 0
-SWEP.Primary.ClipSize = 20
-SWEP.Primary.Delay = 0.06 
-SWEP.Primary.DefaultClip = 20
-SWEP.Primary.Automatic = false
+SWEP.Primary.ClipSize = 999999
+SWEP.Primary.Delay = 0.05
+SWEP.Primary.DefaultClip = 99999
+SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "pistol"
 
 SWEP.Secondary.ClipSize = -1
@@ -47,5 +47,5 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
 --Start of Firemode configuration
-SWEP.IronSightsPos = Vector(4.34,-2,2.8)
-SWEP.IronSightsAng = Vector(.74,0,0)
+SWEP.IronSightsPos = Vector(0,-0,0)
+SWEP.IronSightsAng = Vector(0,0,0)
