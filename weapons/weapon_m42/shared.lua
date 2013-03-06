@@ -31,12 +31,12 @@ SWEP.AutoSwitchFrom = false
 
 SWEP.Primary.Sound = Sound("Weapon_M4A1.Single")
 SWEP.Primary.Recoil = -2
-SWEP.Primary.Unrecoil = 8
+SWEP.Primary.Unrecoil = 0
 SWEP.Primary.Damage = 11
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Cone	 = 0.006
+SWEP.Primary.Cone	 = 0
 SWEP.Primary.ClipSize = 31
-SWEP.Primary.Delay = 0.11
+SWEP.Primary.Delay = 0.096
 SWEP.Primary.DefaultClip = 31
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "smg1"
