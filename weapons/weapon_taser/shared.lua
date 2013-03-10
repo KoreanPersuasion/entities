@@ -22,8 +22,8 @@ SWEP.DrawCrosshair = true;
 
 end
 
-SWEP.Author = "Fub4r";
-SWEP.Contact = "fub4r2006@hotmail.co.uk";
+SWEP.Author = "BigBrainAFK";
+SWEP.Contact = "";
 SWEP.Purpose = "Tasering";
 SWEP.Instructions = "Left click to bring down, then right click to electrocute!";
 
@@ -43,6 +43,8 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= true
 SWEP.Secondary.Ammo			= ""
 
+SWEP.NextStrike = 0
+
 local taseredrags = {}
 local taseruniquetimer1 = 0
 local taseruniquetimer2 = 0
@@ -52,6 +54,7 @@ self.Weapon:DefaultReload( ACT_VM_RELOAD ) //animation for reloading
 end 
  
  function SWEP:PrimaryAttack()
+ if CurTime() < self.NextStrike then return end
  if ( !self:CanPrimaryAttack() ) then return end
  local eyetrace = self.Owner:GetEyeTrace(); 
  if !eyetrace.Entity:IsPlayer() then 
@@ -59,9 +62,14 @@ end
   end
   
 self.Weapon:EmitSound( "Weapon_StunStick.Activate")  
-self.BaseClass.ShootEffects( self ) 
-self:TakePrimaryAmmo(1) 
+self.BaseClass.ShootEffects( self )
+self.NextStrike = CurTime() + 1
 
+ 	if not IsValid(eyetrace.Entity) or (self.Owner:EyePos():Distance(eyetrace.Entity:GetPos()) > 350) or (not eyetrace.Entity:IsPlayer() and not eyetrace.Entity:IsNPC()) then
+		return
+	end
+ 
+self:TakePrimaryAmmo(1) 
  
  if (!SERVER) then return end 
  
@@ -163,12 +171,12 @@ function SWEP:taseNPC(npc, npcShooter)
 	end
 
 function SWEP:setrevivedelay(rag)
-if taseruniquetimer1 > 5 then
+if taseruniquetimer1 > 30 then
 taseruniquetimer1 = 0
 end
 taseruniquetimer1 = taseruniquetimer1 + 1
 
-timer.Create("revivedelay"..taseruniquetimer1, 10, 1, self.taserevive, self, rag ) 
+timer.Create("revivedelay"..taseruniquetimer1, 10, 1, function() self:taserevive(rag) end)
 end
 
 function SWEP:taserevive(ent)
@@ -185,16 +193,11 @@ function SWEP:taserevive(ent)
 	ent.taseredply:Spawn()
 	ent.taseredply:SetPos(ent:GetPos())
 	ent.taseredply:SetVelocity(ent:GetPhysicsObject():GetVelocity())
-ent.taseredply:SetMoveType(MOVETYPE_NONE)
-ent.taseredply:ConCommand("pp_motionblur 1")
-ent.taseredply:ConCommand("pp_motionblur_addalpha 0.06 ")
-ent.taseredply:ConCommand("pp_motionblur_delay 0")
-ent.taseredply:ConCommand("pp_motionblur_drawalpha 0.99 ")
-if taseruniquetimer2 > 5 then
+if taseruniquetimer2 > 30 then
 taseruniquetimer2 = 0
 end
 taseruniquetimer2 = taseruniquetimer2 + 1
-timer.Create("pauseplayer"..taseruniquetimer2, 3, 1, self.pauseplayer, self, ent.taseredply) 
+timer.Create("pauseplayer"..taseruniquetimer2, 3, 1, function() self:pauseplayer(ent.taseredply) end)
 
 	-- revive npc
 	elseif ent.tasewasNPC then
@@ -248,8 +251,8 @@ end
 
 function SWEP:pauseplayer(ply)
 
-ply:SetMoveType(MOVETYPE_WALK )
-ply:ConCommand("pp_motionblur 0")
+self.Owner:PrintMessage( HUD_PRINTCENTER, "Now he can run away again!" )
+return
 
 end
 
