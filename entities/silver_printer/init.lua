@@ -8,6 +8,7 @@ function ENT:Initialize()
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
+	self:SetColor(Color(230,232,250,255))
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then phys:Wake() end
 	self.sparking = false
@@ -39,11 +40,11 @@ function ENT:Destruct()
 	effectdata:SetOrigin(vPoint)
 	effectdata:SetScale(1)
 	util.Effect("Explosion", effectdata)
-	GAMEMODE:Notify(self.dt.owning_ent, 1, 4, "Your money printer has exploded!")
+	GAMEMODE:Notify(self.dt.owning_ent, 1, 4, "Your silver printer has exploded!")
 end
 
 function ENT:BurstIntoFlames()
-	GAMEMODE:Notify(self.dt.owning_ent, 1, 4, "Your money printer is overheating!")
+	GAMEMODE:Notify(self.dt.owning_ent, 1, 4, "Your silver printer is overheating!")
 	self.burningup = true
 	local burntime = math.random(8, 18)
 	self:Ignite(burntime, 0)
@@ -71,7 +72,7 @@ end
 function ENT:Use(activator)
 	if(activator:IsPlayer()) and self:GetNWInt("PrintA") >= 1 then
 	activator:AddMoney(self:GetNWInt("PrintA"));
-	GAMEMODE:Notify(activator, 1, 4, "You have collected $"..self:GetNWInt("PrintA").." from a Money Printer.")
+	GAMEMODE:Notify(activator, 1, 4, "You have collected $"..self:GetNWInt("PrintA").." from a silver printer.")
 	self:SetNWInt("PrintA",0)
 	end
 end
@@ -80,7 +81,7 @@ function ENT:CreateMoneybag()
 	if not IsValid(self) then return end
 	if self:IsOnFire() then return end
 	local MoneyPos = self:GetPos()
-	local Y = GAMEMODE.Config.bronzeamount
+	local Y = GAMEMODE.Config.silveramount
 	if amount == 0 then
 		amount = 250
 	end
@@ -88,7 +89,7 @@ function ENT:CreateMoneybag()
 	local amount = self:GetNWInt("PrintA") + Y
 	self:SetNWInt("PrintA",amount)
 	self.sparking = false
-	timer.Simple(math.random(100, 350), function() PrintMore(self) end)
+	timer.Simple(math.random(240, 1200), function() PrintMore(self) end)
 end
 
 function ENT:Think()

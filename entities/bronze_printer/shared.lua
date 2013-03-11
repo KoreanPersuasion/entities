@@ -1,7 +1,6 @@
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
-ENT.PrintName = "Storing Money Printer"
-ENT.Author = "KoZ"
+ENT.PrintName = "Bronze Money Printer"
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
 

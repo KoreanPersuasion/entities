@@ -12,7 +12,7 @@ function ENT:Draw()
     local owner = self.dt.owning_ent
 	owner = (IsValid(owner) and owner:Nick()) or "Disconnected"
 	
-	txt1 = "Money Printer"
+	txt1 = "Silver Printer"
 	txt2 = "$" ..self:GetNWInt("PrintA")
 	
 	surface.SetFont("HUDNumber5")
