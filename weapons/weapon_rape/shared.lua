@@ -2,11 +2,8 @@
 if (CLIENT) then
 
 SWEP.DrawWeaponInfoBox = true
-SWEP.Author			= "Ice Tea"
-SWEP.Contact		= "Steam Profile"
-SWEP.Purpose		= "Rape Dem' Bitches... or guys"
 SWEP.Instructions	= "Mouse1: Rape\nMouse2: Taunt\nHave Fun!"
-SWEP.PrintName = "Rape SWEP"
+SWEP.PrintName = "Rape"
 SWEP.Slot = 1
 SWEP.SlotPos = 4;
 SWEP.DrawAmmo = false;
